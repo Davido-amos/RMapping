@@ -1,4 +1,3 @@
 # RMapping
 Repo for creating static and interactive maps using R
-
-![Picture1](https://user-images.githubusercontent.com/65489499/222449839-5e0694f7-91d3-446d-a2f0-a9151592bdb7.jpg)
+![Rplot02](https://user-images.githubusercontent.com/65489499/222799883-17d73b24-c067-454d-9122-68c69138188b.png)
