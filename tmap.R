@@ -1,50 +1,32 @@
-# With the tmap package, thematic maps can be generated
-#install.packages("tmap")
+# tmap package, thematic maps can be generated
+
+
+# install.packages("tmap")
+
 # install.packages("devtools")
+
 # library(devtools)
 # install_github("username/repo")
 
 
 library(tmap)
-
 library(sf)
-
 library(readr)
 library(tidyverse)
-
-
-
-admin2 <- st_read("shapefiles/LGAs/LGAs.shp")
-
-roads <- st_read("shapefiles/shapefiles/Accessibility Roads/All_new_roads.shp")
-
-towns <- st_read("shapefiles/shapefiles/Accessibility Points/All_new_points.shp")
-
-test <- read.csv("data.csv")
-
-inso <- st_read("shapefiles/shapefiles/inso/inso.shp") %>%  filter(inso$Location_3 == c("Borno", "Adamawa", "Yobe"))
-
-
-
-
-
-
-
-library(tmap)
-library(sf)
-library(readr)
 library(tigris)
 
 
-
 admin2 <- st_read("shapefiles/LGAs/LGAs.shp")
-
-
+roads <- st_read("shapefiles/shapefiles/Accessibility Roads/All_new_roads.shp")
+towns <- st_read("shapefiles/shapefiles/Accessibility Points/All_new_points.shp")
+test <- read.csv("data.csv")
+inso <- st_read("shapefiles/shapefiles/inso/inso.shp") %>%  filter(inso$Location_3 == c("Borno", "Adamawa", "Yobe"))
+admin2 <- st_read("shapefiles/LGAs/LGAs.shp")
 
 
 data <- read.csv("shapefiles/shapefiles/partners/partners.csv") |>
   
-  # convert a csv table into a spacial object using st_as_sf() from the sf package
+# convert a csv table into a spacial object using st_as_sf() from the sf package
   st_as_sf(
            
            # Columns 
@@ -58,34 +40,11 @@ data <- read.csv("shapefiles/shapefiles/partners/partners.csv") |>
            )
 
 
-
-
-data |> select(LGAs_ADM1_, LGAs_ADM2_ ,partners_1, partners_2, lat, long)
-
 tm_shape(admin2) +
   tm_polygons() +
   tm_text("ADM2_EN", size = 0.6) +
 tm_shape(data) + 
   tm_dots(size = "partners_2" , col = "partners_2", palette = "PRGn" )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # Static map 
