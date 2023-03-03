@@ -1,11 +1,16 @@
 # With the tmap package, thematic maps can be generated
-
 #install.packages("tmap")
+# install.packages("devtools")
+# library(devtools)
+# install_github("username/repo")
+
 
 library(tmap)
+
 library(sf)
 
 library(readr)
+library(tidyverse)
 
 
 
@@ -17,6 +22,70 @@ towns <- st_read("shapefiles/shapefiles/Accessibility Points/All_new_points.shp"
 
 test <- read.csv("data.csv")
 
+inso <- st_read("shapefiles/shapefiles/inso/inso.shp") %>%  filter(inso$Location_3 == c("Borno", "Adamawa", "Yobe"))
+
+
+
+
+
+
+
+library(tmap)
+library(sf)
+library(readr)
+library(tigris)
+
+
+
+admin2 <- st_read("shapefiles/LGAs/LGAs.shp")
+
+
+
+
+data <- read.csv("shapefiles/shapefiles/partners/partners.csv") |>
+  
+  # convert a csv table into a spacial object using st_as_sf() from the sf package
+  st_as_sf(
+           
+           # Columns 
+           coords = c("long", "lat"),
+           
+           remove = FALSE,
+           
+           # Projection
+           crs = 4326
+           
+           )
+
+
+
+
+data |> select(LGAs_ADM1_, LGAs_ADM2_ ,partners_1, partners_2, lat, long)
+
+tm_shape(admin2) +
+  tm_polygons() +
+  tm_text("ADM2_EN", size = 0.6) +
+tm_shape(data) + 
+  tm_dots(size = "partners_2" , col = "partners_2", palette = "PRGn" )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Static map 
@@ -26,10 +95,22 @@ tmap_mode("plot")
 # interactive  map 
 tmap_mode("view")
 
+tm_shape(admin2)+
+tm_fill("yellow"
+        
+        
+) +
+tm_borders(alpha = .5) +
 
+tm_text("ADM2_EN", size = 0.6) +
+
+tm_shape(shp = inso)+
+  tm_dots(alpha = 0.8, col = "Act_1", palette = "PRGn",
+          stretch.palette = TRUE, size = 0.07)
 
 
 map <- tm_shape(admin2) +
+
   
   # fill color 
   tm_fill("TARGET_FID",
@@ -80,7 +161,6 @@ tm_shape( shp = roads) +
  # tm_layout(frame = TRUE) +
  # tm_legend(Position = c("left", "top"))
   
-  
 
 library(readr)
 
@@ -88,8 +168,7 @@ dtm <- read_csv("/Users/hany/Desktop/RLeaflet/data/dtm_data.csv")
 
 library(sf)
 
-adm2 <- st_read(
-  "/Users/hany/Desktop/adm2/nga_admbnda_adm2_osgof_20190417_WFP.shp")
+adm2 <- st_read("/Users/hany/Desktop/adm2/nga_admbnda_adm2_osgof_20190417_WFP.shp")
 
 library(tmap)
 dtm_sf <- st_as_sf(dtm, coords = c("lon", "lat"), crs = 4326)
@@ -103,6 +182,7 @@ tm_shape(dtm_sf) +
 
 #point to polygon
 library(spatialEco)
+
 dtm_lga <- point.in.poly(dtm_sf,adm2)
 
 dtmlgadf <-
@@ -122,12 +202,6 @@ dtm_pol <- geo_join(adm2,
                     "ADM2_EN",
                     "ADM2_EN",
                     how = "left") # Joins the rwi average to the LGA shapefile
-
-
-
-
-
-
 #polygon map
 tm_shape(dtm_pol) +
   tm_fill("blue")
